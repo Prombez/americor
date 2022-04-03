@@ -10,33 +10,31 @@ class HistoryListHelper
 {
     public static function getBodyByModel(History $model)
     {
-        switch ($model->event) {
-            case History::EVENT_CREATED_TASK:
-            case History::EVENT_COMPLETED_TASK:
-            case History::EVENT_UPDATED_TASK:
-                $task = $model->task;
-                return "$model->eventText: " . ($task->title ?? '');
-            case History::EVENT_INCOMING_SMS:
-            case History::EVENT_OUTGOING_SMS:
-                return $model->sms->message ? $model->sms->message : '';
-            case History::EVENT_OUTGOING_FAX:
-            case History::EVENT_INCOMING_FAX:
-                return $model->eventText;
-            case History::EVENT_CUSTOMER_CHANGE_TYPE:
-                return "$model->eventText " .
-                    (Customer::getTypeTextByType($model->getDetailOldValue('type')) ?? "not set") . ' to ' .
-                    (Customer::getTypeTextByType($model->getDetailNewValue('type')) ?? "not set");
-            case History::EVENT_CUSTOMER_CHANGE_QUALITY:
-                return "$model->eventText " .
-                    (Customer::getQualityTextByQuality($model->getDetailOldValue('quality')) ?? "not set") . ' to ' .
-                    (Customer::getQualityTextByQuality($model->getDetailNewValue('quality')) ?? "not set");
-            case History::EVENT_INCOMING_CALL:
-            case History::EVENT_OUTGOING_CALL:
-                /** @var Call $call */
-                $call = $model->call;
-                return ($call ? $call->totalStatusText . ($call->getTotalDisposition(false) ? " <span class='text-grey'>" . $call->getTotalDisposition(false) . "</span>" : "") : '<i>Deleted</i> ');
-            default:
-                return $model->eventText;
+        $entity = self::getTypeNames()[$model->event] ?? null;
+        if ($entity) {
+            if (isset($model->$entity)) return $model->$entity->getHistoryMessage($model);
+            return '<i>Deleted</i>';
         }
+        return $model->eventText;
+    }
+
+    // Можно переписать чтобы искало по тексу в event
+    // TODO: Надо перенести чтобы определялось автоматом по списку классов которые у нас есть, чтобы не надо было дополнять
+
+    public static function getTypeNames()
+    {
+        return [
+            History::EVENT_CREATED_TASK => 'task',
+            History::EVENT_COMPLETED_TASK => 'task',
+            History::EVENT_UPDATED_TASK => 'task',
+            History::EVENT_INCOMING_SMS => 'sms',
+            History::EVENT_OUTGOING_SMS => 'sms',
+            History::EVENT_OUTGOING_FAX => 'fax',
+            History::EVENT_INCOMING_FAX => 'fax',
+            History::EVENT_INCOMING_CALL => 'call',
+            History::EVENT_OUTGOING_CALL => 'call',
+            History::EVENT_CUSTOMER_CHANGE_TYPE => 'customer',
+            History::EVENT_CUSTOMER_CHANGE_QUALITY => 'customer',
+        ];
     }
 }
