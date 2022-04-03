@@ -6,6 +6,7 @@ use app\models\interfaces\HistoryEventInterface;
 use app\models\traits\HistoryDetailAttributeTrait;
 use app\models\traits\HistoryEventTrait;
 use app\models\traits\ObjectNameTrait;
+use app\models\traits\HistoryObjectEventTrait;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -34,7 +35,7 @@ use yii\db\ActiveRecord;
  */
 class History extends ActiveRecord implements HistoryEventInterface
 {
-    use ObjectNameTrait, HistoryEventTrait, HistoryDetailAttributeTrait;
+    use ObjectNameTrait, HistoryEventTrait, HistoryDetailAttributeTrait, HistoryObjectEventTrait;
 
     /**
      * @inheritdoc
