@@ -93,14 +93,18 @@ class History extends ActiveRecord implements HistoryEventInterface
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
+    public function afterFind()
+    {
+        $this->detail = json_decode($this->detail);
+    }
+
     /**
      * @param $attribute
      * @return null
      */
     public function getDetailChangedAttribute($attribute)
     {
-        $detail = json_decode($this->detail);
-        return isset($detail->changedAttributes->{$attribute}) ? $detail->changedAttributes->{$attribute} : null;
+        return isset($this->detail->changedAttributes->{$attribute}) ? $this->detail->changedAttributes->{$attribute} : null;
     }
 
     /**
@@ -129,7 +133,6 @@ class History extends ActiveRecord implements HistoryEventInterface
      */
     public function getDetailData($attribute)
     {
-        $detail = json_decode($this->detail);
-        return isset($detail->data->{$attribute}) ? $detail->data->{$attribute} : null;
+        return isset($this->detail->data->{$attribute}) ? $this->detail->data->{$attribute} : null;
     }
 }
