@@ -9,7 +9,7 @@ trait HistoryObjectEventTrait
         'sms' => 'sms',
         'lead' => 'customer',
         'fax' => 'fax',
-        'deal' => 'deal',
+        'deal' => 'customer',
         'customer' => 'customer',
         'call_ytel' => 'call',
         'call' => 'call',
