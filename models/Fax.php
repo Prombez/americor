@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\models\interfaces\HistoryEventTextInterface;
+use app\models\traits\fax\HistoryMessageTrait;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -21,8 +23,10 @@ use yii\db\ActiveRecord;
  *
  * @property User $user
  */
-class Fax extends ActiveRecord
+class Fax extends ActiveRecord implements HistoryEventTextInterface
 {
+    use HistoryMessageTrait;
+
     const DIRECTION_INCOMING = 0;
     const DIRECTION_OUTGOING = 1;
 

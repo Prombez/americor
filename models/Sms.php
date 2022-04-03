@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\models\interfaces\HistoryEventTextInterface;
+use app\models\traits\sms\HistoryMessageTrait;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -27,8 +29,10 @@ use yii\db\ActiveRecord;
  * @property Customer $customer
  * @property User $user
  */
-class Sms extends ActiveRecord
+class Sms extends ActiveRecord implements HistoryEventTextInterface
 {
+    use HistoryMessageTrait;
+
     const DIRECTION_INCOMING = 0;
     const DIRECTION_OUTGOING = 1;
 

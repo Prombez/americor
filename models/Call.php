@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\models\interfaces\HistoryEventTextInterface;
+use app\models\traits\call\HistoryMessageTrait;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -31,8 +33,9 @@ use yii\db\ActiveRecord;
  * @property Customer $customer
  * @property User $user
  */
-class Call extends ActiveRecord
+class Call extends ActiveRecord implements HistoryEventTextInterface
 {
+    use HistoryMessageTrait;
     const STATUS_NO_ANSWERED = 0;
     const STATUS_ANSWERED = 1;
 

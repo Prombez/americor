@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\models\interfaces\HistoryEventTextInterface;
+use app\models\traits\task\HistoryMessageTrait;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -33,8 +35,10 @@ use yii\db\ActiveRecord;
  * @property string $isInbox
  * @property string $statusText
  */
-class Task extends ActiveRecord
+class Task extends ActiveRecord implements HistoryEventTextInterface
 {
+    use HistoryMessageTrait;
+
     const STATUS_NEW = 0;
     const STATUS_DONE = 1;
     const STATUS_CANCEL = 3;
