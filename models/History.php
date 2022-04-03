@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\models\interfaces\HistoryEventInterface;
+use app\models\traits\HistoryDetailAttributeTrait;
 use app\models\traits\HistoryEventTrait;
 use app\models\traits\ObjectNameTrait;
 use Yii;
@@ -33,7 +34,7 @@ use yii\db\ActiveRecord;
  */
 class History extends ActiveRecord implements HistoryEventInterface
 {
-    use ObjectNameTrait, HistoryEventTrait;
+    use ObjectNameTrait, HistoryEventTrait, HistoryDetailAttributeTrait;
 
     /**
      * @inheritdoc
@@ -98,41 +99,4 @@ class History extends ActiveRecord implements HistoryEventInterface
         $this->detail = json_decode($this->detail);
     }
 
-    /**
-     * @param $attribute
-     * @return null
-     */
-    public function getDetailChangedAttribute($attribute)
-    {
-        return isset($this->detail->changedAttributes->{$attribute}) ? $this->detail->changedAttributes->{$attribute} : null;
-    }
-
-    /**
-     * @param $attribute
-     * @return null
-     */
-    public function getDetailOldValue($attribute)
-    {
-        $detail = $this->getDetailChangedAttribute($attribute);
-        return isset($detail->old) ? $detail->old : null;
-    }
-
-    /**
-     * @param $attribute
-     * @return null
-     */
-    public function getDetailNewValue($attribute)
-    {
-        $detail = $this->getDetailChangedAttribute($attribute);
-        return isset($detail->new) ? $detail->new : null;
-    }
-
-    /**
-     * @param $attribute
-     * @return null
-     */
-    public function getDetailData($attribute)
-    {
-        return isset($this->detail->data->{$attribute}) ? $this->detail->data->{$attribute} : null;
-    }
 }
